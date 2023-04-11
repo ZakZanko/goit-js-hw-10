@@ -18,4 +18,13 @@ function onInput() {
   if (name === '') {
     return (list.innerHTML = ''), (info.innerHTML = '');
   }
+
+  fetchCountries(name).then(countries => {
+    list.innerHTML = '';
+    info.innerHTML = '';
+    if (countries.length === 1) {
+      list.insertAdjacentHTML('beforeend', renderCountryList(countries));
+      info.insertAdjacentHTML('beforeend', renderCountryList(countries));
+    }
+  });
 }
