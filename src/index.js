@@ -1,5 +1,5 @@
 import './css/styles.css';
-import { fetchCountries } from './fetchCountries';
+import { fetchCountries } from './js/fetchCountries';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 
@@ -11,20 +11,59 @@ const refs = {
   info: document.querySelector('.country-info'),
 };
 
-form.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
+refs.form.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput() {
-  const name = form.value.trim();
+  const name = refs.form.value.trim();
   if (name === '') {
-    return (list.innerHTML = ''), (info.innerHTML = '');
+    return (refs.list.innerHTML = ''), (refs.info.innerHTML = '');
   }
 
-  fetchCountries(name).then(countries => {
-    list.innerHTML = '';
-    info.innerHTML = '';
-    if (countries.length === 1) {
-      list.insertAdjacentHTML('beforeend', renderCountryList(countries));
-      info.insertAdjacentHTML('beforeend', renderCountryList(countries));
-    }
-  });
+  fetchCountries(name)
+    .then(countries => {
+      refs.list.innerHTML = '';
+      refs.info.innerHTML = '';
+      if (countries.length === 1) {
+        refs.list.insertAdjacentHTML('beforeend', renderList(countries));
+        refs.info.insertAdjacentHTML('beforeend', renderInfo(countries));
+      } else if (countries.length >= 10) {
+        Notiflix.Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+      } else {
+        refs.list.insertAdjacentHTML('beforeend', renderList(countries));
+      }
+    })
+    .catch(Notiflix.Notify.failure('Oops, there is no country with that name'));
+}
+
+function renderList(countries) {
+  const markup = countries
+    .map(({ name, flags }) => {
+      return `
+          <li class="country-list__item">
+              <img class="country-list__flag" src="${flags.svg}" alt="Flag of ${name.official}" width = 30px height = 30px>
+              <h2 class="country-list__name">${name.official}</h2>
+          </li>
+          `;
+    })
+    .join('');
+  return markup;
+}
+
+function renderInfo(countries) {
+  const markup = countries
+    .map(({ capital, population, languages }) => {
+      return `
+        <ul class="country-info__list">
+            <li class="country-info__item"><p><b>Capital: </b>${capital}</p></li>
+            <li class="country-info__item"><p><b>Population: </b>${population}</p></li>
+            <li class="country-info__item"><p><b>Languages: </b>${Object.values(
+              languages
+            ).join(', ')}</p></li>
+        </ul>
+        `;
+    })
+    .join('');
+  return markup;
 }
