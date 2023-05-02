@@ -1,7 +1,7 @@
 import './css/styles.css';
-import { fetchCountries } from './js/fetchCountries';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
+import { fetchCountries } from './js/fetchCountries';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -28,7 +28,7 @@ function onInput() {
         refs.info.insertAdjacentHTML('beforeend', renderInfo(countries));
       } else if (countries.length >= 10) {
         Notiflix.Notify.info(
-          'Too many matches found. Please enter a more specific name.'
+          'Too many matches found. Please enter a more specific name'
         );
       } else {
         refs.list.insertAdjacentHTML('beforeend', renderList(countries));
