@@ -34,7 +34,13 @@ function onInput() {
         refs.list.insertAdjacentHTML('beforeend', renderList(countries));
       }
     })
-    .catch(Notiflix.Notify.failure('Oops, there is no country with that name'));
+    .catch(err => {
+      if (!err.ok) {
+        Notiflix.Notify.failure('ps, there is no country with that name');
+      } else {
+        Notiflix.Notify.failure(`${err}`);
+      }
+    });
 }
 
 function renderList(countries) {
