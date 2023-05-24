@@ -1,8 +1,8 @@
-const fields = 'fields=name,capital,population,fnguages';
+const fields = 'fields=name,capital,population,flags,languages';
 const BASE_URL = 'https://restcountries.com/v3.1/name/';
 
 function fetchCountries(name) {
-  fetch(`${BASE_URL}${name}?${fields}`).then(response => {
+  return fetch(`${BASE_URL}${name}?${fields}`).then(response => {
     if (!response.ok) {
       throw new Error(response.status);
     }
