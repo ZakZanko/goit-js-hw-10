@@ -16,7 +16,7 @@ refs.form.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 function onInput() {
   const name = refs.form.value.trim();
   if (name === '') {
-    return (refs.list.innerHTML = ''), (refs.info.innerHTML = '');
+    return clear();
   }
 
   fetchCountries(name)
