@@ -11,6 +11,11 @@ const refs = {
   info: document.querySelector('.country-info'),
 };
 
+function clear() {
+  refs.list.innerHTML = '';
+  refs.info.innerHTML = '';
+}
+
 refs.form.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput() {
@@ -68,9 +73,4 @@ function renderInfo(countries) {
     })
     .join('');
   return markup;
-}
-
-function clear() {
-  refs.list.innerHTML = '';
-  refs.info.innerHTML = '';
 }
